@@ -1,8 +1,3 @@
-"""
-Test your fine-tuned Qwen2.5-Coder model with 4-bit quantization + offload.
-Run this AFTER finetune_qwen.py has completed.
-"""
-
 import os
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
