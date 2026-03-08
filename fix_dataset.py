@@ -1,12 +1,3 @@
-"""
-Fix dataset.jsonl — handles messy JSON output from ChatGPT including:
-- Markdown code blocks (```json ... ```)
-- Multi-line JSON objects
-- Extra text between JSON objects
-- Escaped \\n that should be real newlines
-Supports both 2-field and 4-field formats.
-"""
-
 import json
 import re
 
@@ -53,21 +44,21 @@ def extract_json_objects(text):
     return objects
 
 
-# ── Read entire file as text ──────────────────────────────────────────────────
+# Read entire file as text
 print(f" Reading {INPUT_FILE}...")
 
 with open(INPUT_FILE, "r", encoding="utf-8") as f:
     raw_text = f.read()
 
-# ── Remove markdown code blocks ───────────────────────────────────────────────
+# Remove markdown code blocks
 raw_text = re.sub(r'```(?:json|jsonl|python)?\s*', '', raw_text)
 raw_text = re.sub(r'```', '', raw_text)
 
-# ── Extract all JSON objects ───────────────────────────────────────────────────
+#  Extract all JSON objects 
 print("🔍 Extracting JSON objects...")
 all_objects = extract_json_objects(raw_text)
 
-# ── Process and fix each object ───────────────────────────────────────────────
+#  Process and fix each object
 fixed = []
 skipped = 0
 
@@ -91,7 +82,7 @@ for obj in all_objects:
     fixed.append(fixed_item)
 
 
-# ── Remove duplicates by instruction ─────────────────────────────────────────
+# Remove duplicates by instruction 
 seen = set()
 unique = []
 for item in fixed:
@@ -103,13 +94,13 @@ for item in fixed:
 duplicates_removed = len(fixed) - len(unique)
 
 
-# ── Save fixed dataset ────────────────────────────────────────────────────────
+#  Save fixed dataset 
 with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
     for item in unique:
         f.write(json.dumps(item, ensure_ascii=False) + "\n")
 
 
-# ── Summary ───────────────────────────────────────────────────────────────────
+#  Summary 
 has_explanation = sum(1 for item in unique if "explanation" in item)
 has_examples    = sum(1 for item in unique if "examples" in item)
 
@@ -127,7 +118,7 @@ print(f"   output      : {len(unique)}")
 print(f"   explanation : {has_explanation}")
 print(f"   examples    : {has_examples}")
 
-# ── Show sample ───────────────────────────────────────────────────────────────
+# Show sample 
 if unique:
     print(f"\n Sample (first item):")
     print(f"INSTRUCTION : {unique[0]['instruction']}")
