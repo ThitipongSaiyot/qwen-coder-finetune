@@ -55,7 +55,7 @@ raw_text = re.sub(r'```(?:json|jsonl|python)?\s*', '', raw_text)
 raw_text = re.sub(r'```', '', raw_text)
 
 #  Extract all JSON objects 
-print("🔍 Extracting JSON objects...")
+print(" Extracting JSON objects...")
 all_objects = extract_json_objects(raw_text)
 
 #  Process and fix each object
